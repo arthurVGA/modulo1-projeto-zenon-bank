@@ -7,8 +7,8 @@ public class Application {
     static void main() {
         String filename = "data/paysim_with_bad_data.csv";
         TransactionMapper mapper = new TransactionMapper();
-        TransactionIngestor ingestor = new TransactionIngestor(mapper);
+        TransactionIngestor ingestor = new TransactionIngestor(filename, mapper);
 
-        ingestor.showLines(filename);
+        ingestor.showLines();
     }
 }
