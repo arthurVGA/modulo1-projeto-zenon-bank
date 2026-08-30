@@ -1,11 +1,11 @@
 package br.com.zenon.fraud.repositories;
 
 import br.com.zenon.fraud.domain.Transaction;
-import br.com.zenon.fraud.mappers.TransactionMapper;
 import br.com.zenon.fraud.utils.BenchmarkUtil;
 import br.com.zenon.fraud.utils.FileUtils;
 
 import java.io.BufferedReader;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -13,12 +13,10 @@ import java.util.Map;
 
 public class TransactionMapRepository implements TransactionRepository {
     private final Path file;
-    private final TransactionMapper mapper;
     private Map<String, Transaction> fileLines;
 
-    public TransactionMapRepository(String filename, TransactionMapper mapper) {
+    public TransactionMapRepository(String filename) {
         this.file = FileUtils.findFile(filename);
-        this.mapper = mapper;
     }
 
     public void readBenchmark() {
@@ -66,7 +64,20 @@ public class TransactionMapRepository implements TransactionRepository {
 
     protected void putMappedLine(String line, Map<String, Transaction> lines) throws Exception {
         String[] columns = line.split(",");
-        var lineMapped = mapper.map(columns);
-        lines.put(columns[3], lineMapped);
+        lines.put(columns[3],
+                new Transaction(
+                        Integer.parseInt(columns[0]),
+                        columns[1],
+                        new BigDecimal(columns[2]),
+                        columns[3],
+                        new BigDecimal(columns[4]),
+                        new BigDecimal(columns[5]),
+                        columns[6],
+                        new BigDecimal(columns[7]),
+                        new BigDecimal(columns[8]),
+                        Integer.parseInt(columns[9]),
+                        Integer.parseInt(columns[10])
+                )
+        );
     }
 }

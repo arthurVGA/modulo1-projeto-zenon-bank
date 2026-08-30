@@ -7,50 +7,47 @@ public class DestinyClient {
     private BigDecimal oldBalanceDest;
     private BigDecimal newBalanceDest;
 
-    public DestinyClient(String nameDest, BigDecimal oldBalanceDest, BigDecimal newBalanceDest) throws Exception {
+    public DestinyClient(String nameDest, BigDecimal oldBalanceDest, BigDecimal newBalanceDest) {
         this.setNameDest(nameDest);
         this.setOldBalanceDest(oldBalanceDest);
         this.setNewBalanceDest(newBalanceDest);
     }
 
-    private void setNameDest(String nameDest) throws Exception {
+    private void setNameDest(String nameDest) {
         if (nameDest == null) {
-            throw new Exception("NameDest não pode ser nulo.");
+            throw new IllegalArgumentException("NameDest não pode ser nulo.");
         }
         this.nameDest = nameDest;
     }
 
-    private void setOldBalanceDest(BigDecimal oldBalanceDest) throws Exception {
+    private void setOldBalanceDest(BigDecimal oldBalanceDest) {
         if (oldBalanceDest == null) {
-            throw new Exception("OldBalanceDest não pode ser nulo.");
+            throw new IllegalArgumentException("OldBalanceDest não pode ser nulo.");
         }
         if (oldBalanceDest.signum() < 0) {
-            throw new Exception("OldBalanceDest não pode ser menor que zero.");
+            throw new IllegalArgumentException("OldBalanceDest não pode ser menor que zero.");
         }
 
         this.oldBalanceDest = oldBalanceDest;
     }
 
-    private void setNewBalanceDest(BigDecimal newBalanceDest) throws Exception {
+    private void setNewBalanceDest(BigDecimal newBalanceDest) {
         if (newBalanceDest == null) {
-            throw new Exception("NewBalanceDest não pode ser nulo.");
+            throw new IllegalArgumentException("NewBalanceDest não pode ser nulo.");
         }
         if (newBalanceDest.signum() < 0) {
-            throw new Exception("NewBalanceDest não pode ser menor que zero.");
+            throw new IllegalArgumentException("NewBalanceDest não pode ser menor que zero.");
         }
 
         this.newBalanceDest = newBalanceDest;
     }
 
-    public String getNameDest() {
-        return nameDest;
-    }
-
-    public BigDecimal getOldbalanceDest() {
-        return oldBalanceDest;
-    }
-
-    public BigDecimal getNewbalanceDest() {
-        return newBalanceDest;
+    @Override
+    public String toString() {
+        return "DestinyClient[" +
+                "nameDest='" + nameDest + '\'' +
+                ", oldBalanceDest=" + oldBalanceDest +
+                ", newBalanceDest=" + newBalanceDest +
+                ']';
     }
 }
