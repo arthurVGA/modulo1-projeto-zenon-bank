@@ -17,7 +17,7 @@ public class FraudAnalyzer {
 
     public void analyzeTransactions() {
         var transactions = ingestor
-                .readLines()
+                .read1000Lines()
                 .stream()
                 .filter(Transaction::isFraud)
                 .sorted(Comparator

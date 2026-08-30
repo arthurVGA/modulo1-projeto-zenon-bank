@@ -1,64 +1,80 @@
 package br.com.zenon.fraud.ingestors;
 
 import br.com.zenon.fraud.domain.Transaction;
-import br.com.zenon.fraud.mappers.TransactionMapper;
+import br.com.zenon.fraud.utils.FileUtils;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.URISyntaxException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Stream;
 
 public class TransactionIngestor {
-    private final String filename;
-    private final TransactionMapper mapper;
+    private final Path file;
 
-    public TransactionIngestor(String filename, TransactionMapper mapper) {
-        this.filename = filename;
-        this.mapper = mapper;
+    public TransactionIngestor(String filename) {
+        this.file = FileUtils.findFile(filename);
     }
 
-    public void showLines() {
-        readLines()
-                .forEach(System.out::println);
-    }
+    public List<Transaction> read1000Lines()  {
+        String line;
+        List<Transaction> linesMapped = new ArrayList<>();
 
-    public List<Transaction> readLines() {
-        Path file = findFile(filename);
-
-        try (Stream<String> lines = Files.lines(file)) {
-            return lines
-                    .filter(line -> !line.startsWith("step"))
-                    .map(this::mapLine)
-                    .filter(Objects::nonNull)
-                    .toList();
+        try (BufferedReader br = Files.newBufferedReader(file)) {
+            while ((line = br.readLine()) != null && linesMapped.size() < 1000) {
+                addMappedLine(line, linesMapped);
+            }
+            return linesMapped;
         } catch (IOException e) {
             throw new RuntimeException("Problema de I/O ao tentar ler o arquivo");
         }
     }
 
-    protected Path findFile(String filename) {
-        try {
-            return Path.of(
-                    Objects.requireNonNull(
-                                    getClass()
-                                            .getClassLoader()
-                                            .getResource(filename)
-                            )
-                            .toURI()
-            );
-        } catch (URISyntaxException e) {
-            throw new RuntimeException("Problema ao tentar achar o arquivo");
+    public List<Transaction> readFile() {
+        String line;
+        List<Transaction> linesMapped = new ArrayList<>();
+
+        try (BufferedReader br = Files.newBufferedReader(file)) {
+
+            while ((line = br.readLine())  != null) {
+                addMappedLine(line, linesMapped);
+            }
+
+            return linesMapped;
+        } catch (IOException e) {
+            throw new RuntimeException("Problema de I/O ao tentar ler o arquivo");
+        }
+    }
+
+    protected void addMappedLine(String line, List<Transaction> linesMapped) throws IOException {
+        if (line != null && !line.startsWith("step")) {
+            var lineMapped = mapLine(line);
+
+            if (lineMapped != null) {
+                linesMapped.add(lineMapped);
+            }
         }
     }
 
     protected Transaction mapLine(String line) {
+        String[] columns = line.split(",");
         try {
-            String[] columns = line.split(",");
-            return mapper.map(columns);
-        } catch (Exception e) {
+            return new Transaction(
+                    Integer.parseInt(columns[0]),
+                    columns[1],
+                    new BigDecimal(columns[2]),
+                    columns[3],
+                    new BigDecimal(columns[4]),
+                    new BigDecimal(columns[5]),
+                    columns[6],
+                    new BigDecimal(columns[7]),
+                    new BigDecimal(columns[8]),
+                    Integer.parseInt(columns[9]),
+                    Integer.parseInt(columns[10])
+            );
+        } catch (IllegalArgumentException e) {
             System.err.println("Erro: " + line);
             return null;
         }

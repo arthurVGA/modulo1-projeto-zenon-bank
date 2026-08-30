@@ -11,7 +11,7 @@ public class Transaction {
     private boolean isFraud;
     private boolean isFlaggedFraud;
 
-    public Transaction(int step, String type, BigDecimal amount, String nameOrig, BigDecimal oldBalanceOrg, BigDecimal newBalanceOrig, String nameDest, BigDecimal oldBalanceDest, BigDecimal newBalanceDest, Integer isFraud, Integer isFlaggedFraud) throws Exception {
+    public Transaction(int step, String type, BigDecimal amount, String nameOrig, BigDecimal oldBalanceOrg, BigDecimal newBalanceOrig, String nameDest, BigDecimal oldBalanceDest, BigDecimal newBalanceDest, Integer isFraud, Integer isFlaggedFraud) {
         this.setStep(step);
         this.setType(type);
         this.setAmount(amount);
@@ -21,60 +21,61 @@ public class Transaction {
         this.setIsFlaggedFraud(isFlaggedFraud);
     }
 
-    public void setStep(int step) throws Exception {
+    public void setStep(int step) {
         if (step < 1) {
-            throw new Exception("Step não pode ser menor que 1.");
+            throw new IllegalArgumentException("Step não pode ser menor que 1.");
         }
+
         this.step = step;
     }
 
-    public void setType(String type) throws Exception {
+    public void setType(String type) {
         if (type == null) {
-            throw new Exception("Type não pode ser nulo");
+            throw new IllegalArgumentException("Type não pode ser nulo");
         }
+
         this.type = TransactionType.valueOf(type);
     }
 
-    public void setAmount(BigDecimal amount) throws Exception {
+    public void setAmount(BigDecimal amount) {
         if (amount == null) {
-            throw new Exception("Amount não pode ser nulo");
+            throw new IllegalArgumentException("Amount não pode ser nulo");
         }
         if (amount.signum() < 0) {
-            throw new Exception("Amount não pode ser menor que 0.");
+            throw new IllegalArgumentException("Amount não pode ser menor que 0.");
         }
+
         this.amount = amount;
     }
 
-    public void setOriginClient(String nameOrig, BigDecimal oldBalanceOrg, BigDecimal newBalanceOrig) throws Exception {
+    public void setOriginClient(String nameOrig, BigDecimal oldBalanceOrg, BigDecimal newBalanceOrig) {
         this.originClient = new OriginClient(nameOrig, oldBalanceOrg, newBalanceOrig);
     }
 
-    public void setDestinyClient(String nameDest, BigDecimal oldBalanceDest, BigDecimal newBalanceDest) throws Exception {
+    public void setDestinyClient(String nameDest, BigDecimal oldBalanceDest, BigDecimal newBalanceDest) {
         this.destinyClient = new DestinyClient(nameDest, oldBalanceDest, newBalanceDest);
     }
 
-    public void setIsFraud(Integer isFraud) throws Exception {
+    public void setIsFraud(Integer isFraud) {
         if (isFraud == null) {
-            throw new Exception("IsFraud não pode ser nulo");
+            throw new IllegalArgumentException("IsFraud não pode ser nulo");
         }
         if (isFraud != 0 && isFraud != 1) {
-            throw new Exception("IsFraud só pode ser zero ou um.");
+            throw new IllegalArgumentException("IsFraud só pode ser zero ou um.");
         }
+
         this.isFraud = (isFraud == 1);
     }
 
-    public void setIsFlaggedFraud(Integer isFlaggedFraud) throws Exception {
+    public void setIsFlaggedFraud(Integer isFlaggedFraud) {
         if (isFlaggedFraud == null) {
-            throw new Exception("IsFlaggedFraud não pode ser nulo");
+            throw new IllegalArgumentException("IsFlaggedFraud não pode ser nulo");
         }
         if (isFlaggedFraud != 0 && isFlaggedFraud != 1) {
-            throw new Exception("IsFlaggedFraud só pode ser zero ou um.");
+            throw new IllegalArgumentException("IsFlaggedFraud só pode ser zero ou um.");
         }
-        this.isFlaggedFraud = (isFlaggedFraud == 1);
-    }
 
-    public int getStep() {
-        return step;
+        this.isFlaggedFraud = (isFlaggedFraud == 1);
     }
 
     public TransactionType getType() {
@@ -89,16 +90,8 @@ public class Transaction {
         return originClient;
     }
 
-    public DestinyClient getDestinyClient() {
-        return destinyClient;
-    }
-
     public boolean isFraud() {
         return isFraud;
-    }
-
-    public boolean isFlaggedFraud() {
-        return isFlaggedFraud;
     }
 
     @Override

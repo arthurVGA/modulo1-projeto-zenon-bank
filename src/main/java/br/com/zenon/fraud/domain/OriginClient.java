@@ -4,51 +4,52 @@ import java.math.BigDecimal;
 
 public class OriginClient {
     private String nameOrig;
-    private BigDecimal oldbalanceOrg;
-    private BigDecimal newbalanceOrig;
+    private BigDecimal oldBalanceOrg;
+    private BigDecimal newBalanceOrig;
 
-    public OriginClient(String nameOrig, BigDecimal oldbalanceOrg, BigDecimal newbalanceOrig) throws Exception {
+    public OriginClient(String nameOrig, BigDecimal oldBalanceOrg, BigDecimal newBalanceOrig) {
         this.setNameOrig(nameOrig);
-        this.setOldbalanceOrg(oldbalanceOrg);
-        this.setNewbalanceOrig(newbalanceOrig);
+        this.setOldBalanceOrg(oldBalanceOrg);
+        this.setNewBalanceOrig(newBalanceOrig);
     }
 
-    public void setNameOrig(String nameOrig) throws Exception {
+    public void setNameOrig(String nameOrig) {
         if (nameOrig == null) {
-            throw new Exception("NameOrig não pode ser nulo");
+            throw new IllegalArgumentException("NameOrig não pode ser nulo");
         }
         this.nameOrig = nameOrig;
     }
 
-    public void setOldbalanceOrg(BigDecimal oldbalanceOrg) throws Exception {
-        if (oldbalanceOrg == null) {
-            throw new Exception("OldbalanceOrg não pode ser nulo");
+    public void setOldBalanceOrg(BigDecimal oldBalanceOrg) {
+        if (oldBalanceOrg == null) {
+            throw new IllegalArgumentException("OldBalanceOrg não pode ser nulo");
         }
-        if (oldbalanceOrg.signum() < 0) {
-            throw new Exception("OldbalanceOrg não pode ser menor que 0");
+        if (oldBalanceOrg.signum() < 0) {
+            throw new IllegalArgumentException("OldBalanceOrg não pode ser menor que 0");
         }
-        this.oldbalanceOrg = oldbalanceOrg;
+        this.oldBalanceOrg = oldBalanceOrg;
     }
 
-    public void setNewbalanceOrig(BigDecimal newbalanceOrig) throws Exception {
-        if (newbalanceOrig == null) {
-            throw new Exception("NewbalanceOrg não pode ser nulo");
+    public void setNewBalanceOrig(BigDecimal newBalanceOrig) {
+        if (newBalanceOrig == null) {
+            throw new IllegalArgumentException("NewBalanceOrg não pode ser nulo");
         }
-        if (newbalanceOrig.signum() < 0) {
-            throw new Exception("NewbalanceOrg não pode ser menor que 0");
+        if (newBalanceOrig.signum() < 0) {
+            throw new IllegalArgumentException("NewBalanceOrg não pode ser menor que 0");
         }
-        this.newbalanceOrig = newbalanceOrig;
+        this.newBalanceOrig = newBalanceOrig;
     }
 
     public String getNameOrig() {
         return nameOrig;
     }
 
-    public BigDecimal getOldbalanceOrg() {
-        return oldbalanceOrg;
-    }
-
-    public BigDecimal getNewbalanceOrig() {
-        return newbalanceOrig;
+    @Override
+    public String toString() {
+        return "OriginClient[" +
+                "nameOrig='" + nameOrig + '\'' +
+                ", oldbalanceOrg=" + oldBalanceOrg +
+                ", newbalanceOrig=" + newBalanceOrig +
+                ']';
     }
 }
