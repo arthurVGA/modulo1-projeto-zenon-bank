@@ -22,7 +22,7 @@ public class Transaction {
     }
 
     public void setStep(int step) throws Exception {
-        if (step <= 1) {
+        if (step < 1) {
             throw new Exception("Step não pode ser menor que 1.");
         }
         this.step = step;

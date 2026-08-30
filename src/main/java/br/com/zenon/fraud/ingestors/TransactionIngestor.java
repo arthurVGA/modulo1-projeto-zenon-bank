@@ -3,10 +3,7 @@ package br.com.zenon.fraud.ingestors;
 import br.com.zenon.fraud.domain.Transaction;
 import br.com.zenon.fraud.mappers.TransactionMapper;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -33,7 +30,7 @@ public class TransactionIngestor {
 
         try (Stream<String> lines = Files.lines(file)) {
             return lines
-                    .filter(line -> line.startsWith("step"))
+                    .filter(line -> !line.startsWith("step"))
                     .map(this::mapLine)
                     .filter(Objects::nonNull)
                     .toList();
